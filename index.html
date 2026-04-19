@@ -18,16 +18,21 @@
             color: #ffffff;
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .hero-section {
             height: 100vh;
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
         }
 
+        /* --- ПЛЕЕР --- */
         .media-sidebar {
             position: absolute;
             left: 30px;
@@ -107,9 +112,7 @@
             pointer-events: none;
         }
 
-        .vol-wrapper:hover .vol-tooltip {
-            opacity: 1;
-        }
+        .vol-wrapper:hover .vol-tooltip { opacity: 1; }
 
         .vol-slider {
             appearance: none;
@@ -162,17 +165,14 @@
             color: #666;
         }
 
-        .container {
-            text-align: center;
-        }
+        /* --- ЦЕНТРАЛЬНЫЙ ТЕКСТ --- */
+        .container { text-align: center; }
 
         .name {
             font-size: clamp(3rem, 15vw, 8.5rem);
             font-weight: 900;
             letter-spacing: -6px;
             line-height: 1;
-            position: relative;
-            display: inline-block;
             opacity: 0;
             transform: translateY(-120px);
         }
@@ -186,10 +186,10 @@
             opacity: 0;
         }
 
+        /* --- СОЦСЕТИ --- */
         .socials-section {
-            height: 100vh;
+            padding-bottom: 100px;
             display: flex;
-            align-items: center;
             justify-content: center;
             gap: 30px;
         }
@@ -205,18 +205,6 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             transition: all 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .social-link span {
-            font-size: 0.7rem;
-            color: #888;
-            font-weight: 400;
-            letter-spacing: 1px;
-            text-transform: none;
         }
 
         .social-link:hover {
@@ -225,35 +213,21 @@
             border-color: white;
         }
 
-        .social-link:hover span {
-            color: #333;
-        }
-
-        @keyframes slideDown {
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        @keyframes widgetAppear {
-            to { opacity: 1; transform: translateY(-50%) scale(1); }
-        }
-
+        /* --- АНИМАЦИИ --- */
+        @keyframes slideDown { to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeIn { to { opacity: 1; } }
         @keyframes elementAppear {
             from { transform: translateY(15px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
 
         .animate-name { animation: slideDown 1.1s forwards ease-out; }
-        .animate-hello { animation: fadeIn 1s forwards 2s; }
-        
-        .animate-widget { animation: fadeIn 0.8s forwards; }
-        .animate-icon { animation: elementAppear 0.6s forwards; }
-        .animate-vol { animation: elementAppear 0.6s forwards; }
-        .animate-time { animation: elementAppear 0.6s forwards; }
-        .animate-play { animation: elementAppear 0.6s forwards; }
+        .animate-hello { animation: fadeIn 0.8s forwards 1.2s; } /* Ускорил до 1.2s */
+        .animate-widget { animation: fadeIn 0.8s forwards 1.8s; }
+        .animate-icon { animation: elementAppear 0.6s forwards 2.2s; }
+        .animate-vol { animation: elementAppear 0.6s forwards 2.5s; }
+        .animate-time { animation: elementAppear 0.6s forwards 2.8s; }
+        .animate-play { animation: elementAppear 0.6s forwards 3.1s; }
     </style>
 </head>
 <body>
@@ -280,7 +254,7 @@
                 </div>
             </div>
 
-            <audio id="mainAudio" src="track.mp3"></audio>
+            <audio id="mainAudio" src="ISSBROKIE · BLCKK · Teenage Disaster — WTFG! (www.lightaudio.ru).mp3"></audio>
         </div>
 
         <div class="container">
@@ -290,84 +264,76 @@
     </div>
 
     <div class="socials-section">
-        <a href="https://discord.com/users/sin_shlyhu" target="_blank" class="social-link">
-            Discord
-            <span>sin_shlyhu</span>
-        </a>
-        <a href="https://t.me/visulavskiq" target="_blank" class="social-link">
-            Telegram
-            <span>@visulavskiq</span>
-        </a>
+        <a href="https://discord.com/users/sin_shlyhu" target="_blank" class="social-link">Discord</a>
+        <a href="https://t.me/visulavskiq" target="_blank" class="social-link">Telegram</a>
     </div>
 
     <script>
-        const nameEl = document.getElementById('name');
-        const helloEl = document.getElementById('hello');
-        
-        const mediaSidebar = document.getElementById('mediaSidebar');
-        const elIcon = document.getElementById('elIcon');
-        const elVol = document.getElementById('elVol');
-        const elTime = document.getElementById('elTime');
-        const playBtn = document.getElementById('playBtn');
-
-        const audio = document.getElementById('mainAudio');
-        const progressFill = document.getElementById('progressFill');
-        const currentTimeEl = document.getElementById('currentTime');
-        const durationTimeEl = document.getElementById('durationTime');
-        const volumeSlider = document.getElementById('volumeSlider');
-        const volValue = document.getElementById('volValue');
-
-        window.onload = () => {
-            setTimeout(() => nameEl.classList.add('animate-name'), 200);
-            setTimeout(() => helloEl.classList.add('animate-hello'), 2200);
-
-            setTimeout(() => mediaSidebar.classList.add('animate-widget'), 2800);
-            setTimeout(() => elIcon.classList.add('animate-icon'), 3300);
-            setTimeout(() => elVol.classList.add('animate-vol'), 3800);
-            setTimeout(() => elTime.classList.add('animate-time'), 4300);
-            setTimeout(() => playBtn.classList.add('animate-play'), 4800);
+        const elements = {
+            name: document.getElementById('name'),
+            hello: document.getElementById('hello'),
+            widget: document.getElementById('mediaSidebar'),
+            icon: document.getElementById('elIcon'),
+            vol: document.getElementById('elVol'),
+            time: document.getElementById('elTime'),
+            play: document.getElementById('playBtn'),
+            audio: document.getElementById('mainAudio'),
+            fill: document.getElementById('progressFill'),
+            curr: document.getElementById('currentTime'),
+            dur: document.getElementById('durationTime'),
+            vSlider: document.getElementById('volumeSlider'),
+            vTooltip: document.getElementById('volValue')
         };
 
-        playBtn.addEventListener('click', () => {
-            if (audio.paused) {
-                audio.play();
-                playBtn.innerText = "II";
-            } else {
-                audio.pause();
-                playBtn.innerText = "▶";
-            }
-        });
+        window.onload = () => {
+            elements.name.classList.add('animate-name');
+            elements.hello.classList.add('animate-hello');
+            elements.widget.classList.add('animate-widget');
+            elements.icon.classList.add('animate-icon');
+            elements.vol.classList.add('animate-vol');
+            elements.time.classList.add('animate-time');
+            elements.play.classList.add('animate-play');
+        };
 
-        function formatTime(seconds) {
-            if (isNaN(seconds)) return "0:00";
-            const min = Math.floor(seconds / 60);
-            const sec = Math.floor(seconds % 60);
-            return min + ":" + (sec < 10 ? '0' + sec : sec);
+        elements.play.onclick = () => {
+            if (elements.audio.paused) {
+                elements.audio.play();
+                elements.play.innerText = "II";
+            } else {
+                elements.audio.pause();
+                elements.play.innerText = "▶";
+            }
+        };
+
+        function formatTime(s) {
+            if (isNaN(s)) return "0:00";
+            const m = Math.floor(s / 60);
+            const sec = Math.floor(s % 60);
+            return m + ":" + (sec < 10 ? '0' + sec : sec);
         }
 
-        audio.addEventListener('timeupdate', () => {
-            const percent = (audio.currentTime / audio.duration) * 100;
-            progressFill.style.width = (percent || 0) + '%';
-            currentTimeEl.innerText = formatTime(audio.currentTime);
-        });
+        elements.audio.ontimeupdate = () => {
+            const p = (elements.audio.currentTime / elements.audio.duration) * 100;
+            elements.fill.style.width = (p || 0) + '%';
+            elements.curr.innerText = formatTime(elements.audio.currentTime);
+        };
 
-        audio.addEventListener('loadedmetadata', () => {
-            durationTimeEl.innerText = formatTime(audio.duration);
-        });
+        elements.audio.onloadedmetadata = () => {
+            elements.dur.innerText = formatTime(elements.audio.duration);
+        };
 
-        volumeSlider.addEventListener('input', (e) => {
-            const val = e.target.value;
-            audio.volume = val / 100;
-            volValue.innerText = val;
-        });
+        elements.vSlider.oninput = (e) => {
+            const v = e.target.value;
+            elements.audio.volume = v / 100;
+            elements.vTooltip.innerText = v;
+        };
 
-        audio.addEventListener('ended', () => {
-            playBtn.innerText = "▶";
-            progressFill.style.width = '0%';
-        });
+        elements.audio.onended = () => {
+            elements.play.innerText = "▶";
+            elements.fill.style.width = '0%';
+        };
         
-        audio.volume = 0.5;
+        elements.audio.volume = 0.5;
     </script>
-
 </body>
 </html>
