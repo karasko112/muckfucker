@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karasko • Main</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --bg: #0a0a0a;
+            --accent: #00ff9d;
+            --text: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        header {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
+            position: relative;
+        }
+
+        .hero {
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #00ff9d, #00b8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            font-size: 1.4rem;
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            opacity: 0.9;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: #00cc7a;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0, 255, 157, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid var(--accent);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .section {
+            padding: 100px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+
+        /* Простые частицы на фоне (опционально) */
+        .particles {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="particles"></div>
+        <div class="hero">
+            <h1>Привет, я [karas]</h1>
+            <p>я начинающий креатор в roblox. пишу лёгкие скрипты</p>
+            
+            <div class="buttons">
+                <a href="https://discord.gg/sin_shlyhu" class="btn btn-primary" target="_blank">Discord</a>
+                <a href="https://github.com/karasko112" class="btn btn-secondary" target="_blank">GitHub</a>
+                <!-- Добавь ещё кнопки сюда -->
+                <!-- <a href="#" class="btn btn-secondary">Telegram</a> -->
+            </div>
+        </div>
+    </header>
+
+    <div class="section">
+        <h2 style="text-align: center; margin-bottom: 40px; font-size: 2.5rem;">Что здесь есть</h2>
+        <p style="text-align: center; font-size: 1.2rem; opacity: 0.85;">
+            Пока просто красивый лендинг. Потом можно добавить раздел с проектами, скриптами, новостями и т.д.
+        </p>
+    </div>
+
+    <footer>
+        © 2026 ///create by karasko///
+    </footer>
+
+</body>
+</html>
