@@ -17,17 +17,18 @@
             background: #000000;
             color: #ffffff;
             font-family: 'Inter', sans-serif;
-            min-height: 150vh; /* Чтобы можно было поскроллить и проверить фиксацию */
+            min-height: 200vh;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
+            padding-top: 40vh;
+            position: relative;
         }
 
-        /* --- ПЛЕЕР СЛЕВА (ФИКСИРОВАННЫЙ) --- */
         .media-sidebar {
-            position: fixed;
+            position: absolute;
             left: 30px;
-            top: 50%;
+            top: 50vh;
             transform: translateY(-50%);
             width: 280px;
             background: rgba(255, 255, 255, 0.05);
@@ -38,10 +39,8 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
-            z-index: 1000;
         }
 
-        /* Инфо о треке */
         .track-info {
             display: flex;
             align-items: center;
@@ -67,7 +66,6 @@
         .track-name { font-weight: 700; font-size: 0.9rem; }
         .artist-name { color: #888; font-size: 0.75rem; }
 
-        /* Прогресс (только просмотр) */
         .progress-container {
             display: flex;
             flex-direction: column;
@@ -96,15 +94,13 @@
             color: #666;
         }
 
-        /* Управление и громкость в один ряд */
         .controls-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 100px;
+            height: 90px;
         }
 
-        /* Кнопка Play */
         .play-btn {
             background: none;
             border: 2px solid #fff;
@@ -124,45 +120,55 @@
             color: #000;
         }
 
-        /* Вертикальная громкость (Жирная и круглая) */
-        .volume-wrapper {
-            height: 100%;
+        .vol-wrapper {
+            position: relative;
+            width: 40px;
+            height: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 30px;
         }
 
-        input[type=range].vertical-vol {
-            writing-mode: bt-lr; /* Для поддержки некоторых браузеров */
-            appearance: slider-vertical;
-            width: 12px;
-            height: 80px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+        .vol-tooltip {
+            position: absolute;
+            top: -25px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+
+        .vol-wrapper:hover .vol-tooltip {
+            opacity: 1;
+        }
+
+        .vol-slider {
+            appearance: none;
+            width: 80px;
+            height: 6px;
+            background: #111;
+            border: 1px solid #800080;
+            border-radius: 4px;
             outline: none;
+            transform: rotate(-90deg);
             cursor: pointer;
         }
 
-        /* Стилизация ползунка для Chrome/Safari */
-        input[type=range].vertical-vol::-webkit-slider-runnable-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-
-        input[type=range].vertical-vol::-webkit-slider-thumb {
+        .vol-slider::-webkit-slider-thumb {
             appearance: none;
             width: 16px;
             height: 16px;
-            background: #ffffff;
             border-radius: 50%;
+            background: #fff;
+            border: 2px solid #800080;
             cursor: pointer;
-            margin-left: -2px;
         }
 
-        /* --- ЦЕНТРАЛЬНЫЙ ТЕКСТ --- */
-        .center-content {
+        .container {
             text-align: center;
+            position: relative;
         }
 
         .name {
@@ -170,14 +176,40 @@
             font-weight: 900;
             letter-spacing: -6px;
             line-height: 1;
+            position: relative;
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(-120px);
         }
 
         .hello {
             font-size: clamp(1rem, 4vw, 2.4rem);
+            font-weight: 400;
             letter-spacing: 10px;
             text-transform: uppercase;
-            margin-top: 20px;
-            color: #444;
+            margin-top: 30px;
+            opacity: 0;
+        }
+
+        @keyframes slideDown {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .animate-name {
+            animation: slideDown 1.1s forwards ease-out;
+        }
+
+        .animate-hello {
+            animation: fadeIn 1s forwards 2s;
         }
     </style>
 </head>
@@ -205,28 +237,41 @@
         <div class="controls-row">
             <button class="play-btn" id="playBtn">▶</button>
             
-            <div class="volume-wrapper">
-                <input type="range" class="vertical-vol" id="volumeSlider" min="0" max="1" step="0.01" value="0.5">
+            <div class="vol-wrapper">
+                <div class="vol-tooltip" id="volValue">50</div>
+                <input type="range" class="vol-slider" id="volumeSlider" min="0" max="100" value="50">
             </div>
         </div>
 
         <audio id="mainAudio" src="https://files.catbox.moe/uozrbe.mp3"></audio>
     </div>
 
-    <div class="center-content">
-        <h1 class="name">karasko</h1>
-        <p class="hello">hello guys</p>
+    <div class="container">
+        <div class="name" id="name">karasko</div>
+        <div class="hello" id="hello">hello guys</div>
     </div>
 
     <script>
+        const nameEl = document.getElementById('name');
+        const helloEl = document.getElementById('hello');
         const audio = document.getElementById('mainAudio');
         const playBtn = document.getElementById('playBtn');
         const progressFill = document.getElementById('progressFill');
         const currentTimeEl = document.getElementById('currentTime');
         const durationTimeEl = document.getElementById('durationTime');
         const volumeSlider = document.getElementById('volumeSlider');
+        const volValue = document.getElementById('volValue');
 
-        // Play/Pause
+        window.onload = () => {
+            setTimeout(() => {
+                nameEl.classList.add('animate-name');
+            }, 200);
+
+            setTimeout(() => {
+                helloEl.classList.add('animate-hello');
+            }, 2200);
+        };
+
         playBtn.addEventListener('click', () => {
             if (audio.paused) {
                 audio.play();
@@ -237,35 +282,35 @@
             }
         });
 
-        // Форматирование времени (0:00)
         function formatTime(seconds) {
+            if (isNaN(seconds)) return "0:00";
             const min = Math.floor(seconds / 60);
             const sec = Math.floor(seconds % 60);
-            return `${min}:${sec < 10 ? '0' + sec : sec}`;
+            return min + ":" + (sec < 10 ? '0' + sec : sec);
         }
 
-        // Обновление прогресса
         audio.addEventListener('timeupdate', () => {
             const percent = (audio.currentTime / audio.duration) * 100;
-            progressFill.style.width = percent + '%';
+            progressFill.style.width = (percent || 0) + '%';
             currentTimeEl.innerText = formatTime(audio.currentTime);
         });
 
-        // Установка длительности трека при загрузке
         audio.addEventListener('loadedmetadata', () => {
             durationTimeEl.innerText = formatTime(audio.duration);
         });
 
-        // Громкость
         volumeSlider.addEventListener('input', (e) => {
-            audio.volume = e.target.value;
+            const val = e.target.value;
+            audio.volume = val / 100;
+            volValue.innerText = val;
         });
 
-        // Сброс кнопки при окончании трека
         audio.addEventListener('ended', () => {
             playBtn.innerText = "▶";
             progressFill.style.width = '0%';
         });
+        
+        audio.volume = 0.5;
     </script>
 
 </body>
